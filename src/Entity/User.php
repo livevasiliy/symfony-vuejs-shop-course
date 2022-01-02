@@ -17,34 +17,39 @@ class User implements UserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    private ?string $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private array $roles = [];
 
     #[ORM\Column(type: 'string')]
-    private $password;
+    private string $password;
 
     #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $fullName;
+    private ?string $fullName;
 
     #[ORM\Column(type: 'string', length: 30, nullable: true)]
-    private $phone;
+    private ?string $phone;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $address;
+    private ?string $address;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $zipcode;
+    private ?string $zipcode;
 
     #[ORM\Column(type: 'boolean')]
-    private $isDeleted;
+    private bool $isDeleted;
+
+    public function __construct()
+    {
+        $this->isDeleted = false;
+    }
 
     public function getId(): ?int
     {
