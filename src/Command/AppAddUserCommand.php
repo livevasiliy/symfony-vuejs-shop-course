@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 class AppAddUserCommand extends Command
@@ -21,16 +21,16 @@ class AppAddUserCommand extends Command
     protected static $defaultDescription = 'Create user';
 
     private EntityManagerInterface $entityManager;
-    private UserPasswordEncoderInterface $encoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private UserRepository $userRepository;
 
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder, UserRepository $userRepository)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository)
     {
         parent::__construct();
 
         $this->entityManager = $entityManager;
-        $this->encoder = $encoder;
+        $this->passwordHasher = $passwordHasher;
         $this->userRepository = $userRepository;
     }
 
@@ -109,7 +109,7 @@ class AppAddUserCommand extends Command
         $user->setEmail($email);
         $user->setRoles([$isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER']);
 
-        $encodePassword = $this->encoder->encodePassword($user, $password);
+        $encodePassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($encodePassword);
 
         $user->setIsVerified(true);
