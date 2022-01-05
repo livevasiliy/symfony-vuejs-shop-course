@@ -1,4 +1,5 @@
 security:
+    enable_authenticator_manager: true
     encoders:
         App\Entity\User:
             algorithm: auto
@@ -16,31 +17,29 @@ security:
             security: false
         admin_secured_area:
             pattern: ^/admin
-            anonymous: true
             lazy: true
             provider: app_user_provider
-            guard:
-                authenticators:
-                    - App\Security\Admin\LoginFormAuthenticator
+            custom_authenticators:
+                - App\Security\Authenticator\Admin\LoginFormAuthenticator
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 684800
                 path: /admin/
             logout:
                 path: admin_security_logout
+                target: admin_security_login
         main:
-            anonymous: true
             lazy: true
             provider: app_user_provider
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
+            custom_authenticators:
+                - App\Security\Authenticator\Main\LoginFormAuthenticator
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800 # 1 week
                 path: /
             logout:
                 path: main_logout
+                target: main_login
                 # where to redirect after logout
                 # target: app_any_route
 
