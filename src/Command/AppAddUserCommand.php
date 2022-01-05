@@ -109,8 +109,8 @@ class AppAddUserCommand extends Command
         $user->setEmail($email);
         $user->setRoles([$isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER']);
 
-        $encodePassword = $this->passwordHasher->hashPassword($user, $password);
-        $user->setPassword($encodePassword);
+        $newHashedPassword = $this->passwordHasher->hashPassword($user, $password);
+        $user->setPassword($newHashedPassword);
 
         $user->setIsVerified(true);
 
