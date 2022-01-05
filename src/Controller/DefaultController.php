@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\EditProductFormType;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,11 +13,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+
+    /**
+     * DefaultController constructor.
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('/', name: 'main_homepage')]
     public function index(): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $productList = $entityManager->getRepository(Product::class)->findAll();
+        $productList = $this->entityManager->getRepository(Product::class)->findAll();
 
         return $this->render('main/default/index.html.twig', []);
     }
@@ -24,10 +35,8 @@ class DefaultController extends AbstractController
     #[Route('/add-product', name: 'product_add', methods: ['GET', 'POST'])]
     public function editProduct(Request $request, int $id = null): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         if ($id) {
-            $product = $entityManager->getRepository(Product::class)->find($id);
+            $product = $this->entityManager->getRepository(Product::class)->find($id);
         } else {
             $product = new Product();
         }
@@ -37,8 +46,8 @@ class DefaultController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($product);
-            $entityManager->flush();
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('product_edit', ['id' => $product->getId()]);
         }

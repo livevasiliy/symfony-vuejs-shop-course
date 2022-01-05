@@ -46,9 +46,9 @@ class LoginFormAuthenticator extends AbstractAuthenticator
 
     /**
      * @param Request $request
-     * @return PassportInterface
+     * @return Passport
      */
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email');
         $plaintextPassword = $request->request->get('password');
