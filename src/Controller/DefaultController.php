@@ -23,7 +23,9 @@ class DefaultController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/', name: 'main_homepage')]
+    /**
+     * @Route("/", name="main_homepage")
+     */
     public function index(): Response
     {
         $productList = $this->entityManager->getRepository(Product::class)->findAll();

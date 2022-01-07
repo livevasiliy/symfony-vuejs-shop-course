@@ -8,41 +8,63 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProductRepository::class)]
+/**
+ * @ORM\Entity(repositoryClass=ProductRepository::class)
+ */
 class Product
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?string $title;
 
-    #[ORM\Column(type: 'decimal', precision: 6, scale: 2)]
-    private $price;
+    /**
+     * @ORM\Column(type="decimal", precision=6, scale=2)
+     */
+    private ?string $price;
 
-    #[ORM\Column(type: 'integer')]
-    private $quantity;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $quantity;
 
-    #[ORM\Column(type: 'datetime')]
+    /**
+     * @ORM\Column(type="datetime")
+     */
     private $createdAt;
 
-    #[ORM\Column(type: 'text')]
-    private $description;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private ?string $description;
 
-    #[ORM\Column(type: 'boolean')]
-    private $isPublished;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isPublished;
 
-    #[ORM\Column(type: 'boolean')]
-    private $isDeleted;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isDeleted;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, cascade: ['persist'], orphanRemoval: true)]
+    /**
+     * @ORM\OneToMany(targetEntity=ProductImage::class, mappedBy="product", cascade={"persist"}, orphanRemoval=true)
+     */
     private $productImages;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Gedmo\Slug(fields: ['title'])]
-    private $slug;
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(type="string", length=128, unique=true, nullable=true)
+     */
+    private ?string $slug = null;
 
     public function getId(): ?int
     {

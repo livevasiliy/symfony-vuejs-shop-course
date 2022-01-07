@@ -11,13 +11,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'main_profile_index')]
+    /**
+     * @Route("/profile", name="main_profile_index")
+     */
     public function index(): Response
     {
         return $this->render('main/profile/index.html.twig', []);
     }
 
-    #[Route('/profile/edit', name: 'main_profile_edit')]
+    /**
+     * @Route("/profile/edit", name="main_profile_edit")
+     */
     public function edit(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();

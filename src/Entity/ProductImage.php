@@ -5,26 +5,38 @@ namespace App\Entity;
 use App\Repository\ProductImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProductImageRepository::class)]
+/**
+ * @ORM\Entity(repositoryClass=ProductImageRepository::class)
+ */
 class ProductImage
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'productImages')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $product;
+    /**
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productImages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Product $product;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $filenameBig;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $filenameBig;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $filenameMiddle;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $filenameMiddle;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $filenameSmall;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $filenameSmall;
 
     public function getId(): ?int
     {
