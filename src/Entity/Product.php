@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -34,6 +37,13 @@ class Product
     #[ORM\Column(type: 'boolean')]
     private $isDeleted;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductImage::class, cascade: ['persist'], orphanRemoval: true)]
+    private $productImages;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Gedmo\Slug(fields: ['title'])]
+    private $slug;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,6 +66,7 @@ class Product
         $this->createdAt = new \DateTimeImmutable();
         $this->isPublished = false;
         $this->isDeleted = false;
+        $this->productImages = new ArrayCollection();
     }
 
     public function getPrice(): ?string
@@ -126,6 +137,48 @@ class Product
     public function setIsDeleted(bool $isDeleted): self
     {
         $this->isDeleted = $isDeleted;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductImage[]
+     */
+    public function getProductImages(): Collection
+    {
+        return $this->productImages;
+    }
+
+    public function addProductImage(ProductImage $productImage): self
+    {
+        if (!$this->productImages->contains($productImage)) {
+            $this->productImages[] = $productImage;
+            $productImage->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductImage(ProductImage $productImage): self
+    {
+        if ($this->productImages->removeElement($productImage)) {
+            // set the owning side to null (unless already changed)
+            if ($productImage->getProduct() === $this) {
+                $productImage->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
