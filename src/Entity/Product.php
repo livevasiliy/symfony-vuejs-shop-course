@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV4;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -30,17 +29,17 @@ class Product
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="decimal", precision=6, scale=2)
      */
-    private ?string $price;
+    private string $price;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $quantity;
+    private int $quantity;
 
     /**
      * @ORM\Column(type="datetime")
@@ -78,7 +77,7 @@ class Product
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -147,7 +146,7 @@ class Product
         return $this;
     }
 
-    public function getIsPublished(): ?bool
+    public function getIsPublished(): bool
     {
         return $this->isPublished;
     }
@@ -159,7 +158,7 @@ class Product
         return $this;
     }
 
-    public function getIsDeleted(): ?bool
+    public function getIsDeleted(): bool
     {
         return $this->isDeleted;
     }
